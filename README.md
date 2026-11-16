@@ -6,7 +6,7 @@ The game lives in [`rom/`](./rom).
 
 ## Play
 
-**[Play it in your browser](https://32teeth.github.io/tetris)**
+**[Play it in your browser](https://32teeth.github.io/dmg-tetris)**
 
 GitHub Pages serves the repository root from the `main` branch (Settings → Pages → Source: *Deploy from a branch*, `main` / `/ (root)`). The root [`index.html`](./index.html) loads the game from `rom/` via `<base href="rom/">`, so the site opens straight into the game; keep it in sync with [`rom/index.html`](./rom/index.html).
 
