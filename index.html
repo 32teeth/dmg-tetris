@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tetris — Game Boy</title>
+    <!-- Serves the game from rom/ at the site root; keep in sync with rom/index.html. -->
+    <base href="rom/" />
+    <link rel="stylesheet" href="tetris.css" />
+    <script src="art.js" defer></script>
+    <script src="screens.js" defer></script>
+    <script src="tetris.js" defer></script>
+  </head>
+  <body>
+    <main class="handheld">
+      <div class="lcd">
+        <canvas
+          id="screen"
+          width="160"
+          height="144"
+          aria-label="Game Boy Tetris screen"
+        ></canvas>
+      </div>
+
+      <dl class="keys">
+        <div>
+          <dt>D-Pad</dt>
+          <dd>Arrow keys</dd>
+        </div>
+        <div>
+          <dt>A (rotate ↻)</dt>
+          <dd>X / Space</dd>
+        </div>
+        <div>
+          <dt>B (rotate ↺)</dt>
+          <dd>Z</dd>
+        </div>
+        <div>
+          <dt>Start</dt>
+          <dd>Enter</dd>
+        </div>
+      </dl>
+    </main>
+  </body>
+</html>

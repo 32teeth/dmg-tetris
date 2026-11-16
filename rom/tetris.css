@@ -1,0 +1,102 @@
+@layer reset, page, screen;
+
+/* LCD shades, lightest to darkest */
+:root {
+  --gb-0: #fffb87;
+  --gb-1: #b1ae4e;
+  --gb-2: #84804e;
+  --gb-3: #4e4e4e;
+
+  --scale: 4;
+  --scale-px: calc(var(--scale) * 1px);
+  --gap: 1px;
+  --grid: #00000026;
+  --lcd-w: 160px;
+  --lcd-h: 144px;
+}
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body,
+  dl,
+  dd {
+    margin: 0;
+  }
+}
+
+@layer page {
+  body {
+    min-block-size: 100dvh;
+    display: grid;
+    place-items: center;
+    background: #1c1d21;
+    color: #9a9ca3;
+    font:
+      12px/1.4 ui-monospace,
+      "SF Mono",
+      Menlo,
+      monospace;
+  }
+
+  .handheld {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: center;
+  }
+
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: center;
+
+    & div {
+      display: flex;
+      gap: 0.5ch;
+    }
+
+    & dt {
+      color: #c9cbd1;
+
+      &::after {
+        content: ":";
+      }
+    }
+  }
+}
+
+@layer screen {
+  .lcd {
+    position: relative;
+    inline-size: calc(var(--lcd-w) * var(--scale));
+    block-size: calc(var(--lcd-h) * var(--scale));
+  }
+
+  #screen {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    background: var(--gb-0);
+    image-rendering: pixelated;
+  }
+
+  /* LCD pixel grid: a 1px dark line on the leading edge of every game pixel, plus a soft inner shadow. */
+  .lcd::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to right, var(--grid) var(--gap), transparent var(--gap)),
+      linear-gradient(to bottom, var(--grid) var(--gap), transparent var(--gap));
+    background-size: var(--scale-px) var(--scale-px);
+    box-shadow:
+      inset 4px 4px 12px var(--grid),
+      inset -4px -4px 12px var(--grid);
+  }
+}
