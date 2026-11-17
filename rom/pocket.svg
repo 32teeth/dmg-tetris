@@ -1,6 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 581 823" width="581" height="823">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 19 466 760" width="466" height="760">
   <!-- Game Boy Pocket body artwork; the screen, D-pad and buttons are live HTML layered on top. -->
-  <path fill="#20232a" d="M84 63H524A12 12 0 0 1 536 75V735A78 78 0 0 1 458 813H84A12 12 0 0 1 72 801V75A12 12 0 0 1 84 63Z" />
   <circle cx="141" cy="28" r="5.5" fill="#bfbfbf" />
   <path fill="#bfbfbf" stroke="#b4b4b4" stroke-width="1.5" d="M49 28H489A12 12 0 0 1 501 40V700A78 78 0 0 1 423 778H49A12 12 0 0 1 37 766V40A12 12 0 0 1 49 28Z" />
   <path fill="#d9d9d9" stroke="#cdcdcd" d="M76 74H463A8 8 0 0 1 471 82V366A50 50 0 0 1 421 416H76A8 8 0 0 1 68 408V82A8 8 0 0 1 76 74Z" />

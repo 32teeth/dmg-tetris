@@ -30,7 +30,7 @@ python3 -m http.server --directory rom 8000
 | Start                    | `Enter`                     |
 | Select (hide NEXT piece) | `Space` / `Shift` / `Backspace` |
 
-On a touch screen, use the on-screen buttons; the D-pad can be slid across for diagonals, and several buttons can be held at once.
+On a touch screen, use the on-screen buttons; the D-pad can be slid across for diagonals, and several buttons can be held at once. The console is sized to fit the screen, text selection and zoom gestures are disabled, and the game is portrait-only: in landscape on a phone it is frozen behind a "rotate your device" prompt. The key legend below the console only appears on desktop.
 
 - **Title:** `Enter` to continue.
 - **Level select:** arrows pick a level (0–9). `Enter` or `X` starts; hold `X` while pressing `Enter` to start at level +10. `Z` goes back.
@@ -54,6 +54,7 @@ There is no music, and no B-type or 2-player mode.
 | [`rom/pocket.svg`](./rom/pocket.svg) | Game Boy Pocket body artwork                    |
 | [`rom/handheld.css`](./rom/handheld.css) | Pocket layout, buttons and touch styling    |
 | [`rom/handheld.js`](./rom/handheld.js) | Touch/mouse input and button lighting         |
+| [`rom/manifest.webmanifest`](./rom/manifest.webmanifest) | Home-screen app metadata (portrait) |
 | [`rom/tetris.css`](./rom/tetris.css) | Palette, scaling and the LCD pixel-grid overlay |
 | [`rom/tetris.js`](./rom/tetris.js)   | Game logic, input, sound effects and rendering  |
 | [`rom/art.js`](./rom/art.js)         | 8×8 tile art (blocks, digits, panel frame)      |

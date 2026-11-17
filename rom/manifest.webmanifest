@@ -1,0 +1,9 @@
+{
+  "name": "Tetris — Game Boy",
+  "short_name": "Tetris",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#282c35",
+  "theme_color": "#282c35"
+}

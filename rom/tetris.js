@@ -670,6 +670,12 @@ class App {
     let acc = 0;
     let stale = true;
     const loop = now => {
+      // Hosts can freeze the game (e.g. while the device is in landscape) with data-suspended.
+      if (document.documentElement.hasAttribute("data-suspended")) {
+        last = now;
+        requestAnimationFrame(loop);
+        return;
+      }
       acc += Math.min(now - last, 250);
       last = now;
       while (acc >= FRAME_MS) {

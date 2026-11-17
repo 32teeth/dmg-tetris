@@ -107,7 +107,23 @@ function bindDpad(element) {
 document.querySelectorAll("[data-button]").forEach(bindButton);
 document.querySelectorAll("[data-dpad]").forEach(bindDpad);
 addEventListener("blur", releaseAll);
-document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Keep touches from selecting text, dragging images, opening menus or pinch-zooming.
+for (const type of ["contextmenu", "selectstart", "dragstart", "gesturestart"]) {
+  document.addEventListener(type, e => e.preventDefault());
+}
+
+// Portrait only. Orientation lock only works for installed or fullscreen apps, so
+// elsewhere the CSS swaps the console for a prompt and the game is suspended.
+screen.orientation?.lock?.("portrait").catch(() => {});
+
+const landscape = matchMedia("(orientation: landscape) and (pointer: coarse) and (max-height: 600px)");
+function suspend() {
+  document.documentElement.toggleAttribute("data-suspended", landscape.matches);
+  if (landscape.matches) releaseAll();
+}
+landscape.addEventListener("change", suspend);
+suspend();
 
 // Button lighting. The game still plays if the package can't be loaded.
 const lights = new Map();

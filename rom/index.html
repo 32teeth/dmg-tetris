@@ -4,9 +4,13 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
     />
     <meta name="theme-color" content="#282c35" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>Tetris — Game Boy</title>
     <link rel="stylesheet" href="tetris.css" />
     <link rel="stylesheet" href="handheld.css" />
@@ -113,5 +117,13 @@
         </div>
       </dl>
     </main>
+
+    <div class="rotate" role="alert">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="14" y="4" width="20" height="40" rx="3" />
+        <path d="M22 38h4" />
+      </svg>
+      <p>Rotate your device to portrait to play.</p>
+    </div>
   </body>
 </html>
