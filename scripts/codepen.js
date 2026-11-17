@@ -33,7 +33,9 @@ export function build() {
   const script = ["art.js", "screens.js", "tetris.js", "handheld.js"]
     .map(file => toScript(read(file)))
     .join("\n")
-    .replace('import("multi-key-handler")', `import("${cdn}")`);
+    .replace('import("multi-key-handler")', `import("${cdn}")`)
+    // Only string literals contain non-ASCII (the (c) and heart glyph keys); escaping keeps the pane plain ASCII.
+    .replace(/[^\x00-\x7f]/g, c => `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`);
 
   return {
     "index.html": `${body}\n`,

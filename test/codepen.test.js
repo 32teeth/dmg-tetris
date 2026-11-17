@@ -23,6 +23,10 @@ describe("build", () => {
     expect(files["index.html"]).not.toMatch(/<(script|link|html|body)\b/);
   });
 
+  it("is plain ASCII, so CodePen's prefill and any encoding setting handle it", () => {
+    for (const text of Object.values(files)) expect(text).toMatch(/^[\x00-\x7f]*$/);
+  });
+
   it("combines both stylesheets", () => {
     expect(files["style.css"]).toContain("--gb-0");
     expect(files["style.css"]).toContain(".pocket");
