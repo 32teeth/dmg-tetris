@@ -1,0 +1,163 @@
+/* Game Boy Pocket shell. Everything is laid out in the artwork's 581×823 coordinate space (see pocket.svg). */
+
+body {
+  background: #282c35;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stage {
+  --legend: 0px;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.pocket {
+  position: relative;
+  container-type: inline-size;
+  inline-size: min(
+    100vw - 1rem,
+    (100dvh - 1rem - var(--legend)) * 581 / 823,
+    900px
+  );
+  aspect-ratio: 581 / 823;
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.ctl {
+  --u: calc(100cqw / 581);
+  position: absolute;
+  inset-inline-start: calc(var(--x) / 581 * 100%);
+  inset-block-start: calc(var(--y) / 823 * 100%);
+  inline-size: calc(var(--w) / 581 * 100%);
+  block-size: calc(var(--h) / 823 * 100%);
+}
+
+/* Screen */
+.pocket .lcd {
+  --gap: 25%;
+  --grid: #0000001c;
+  padding: 0;
+  inline-size: calc(var(--w) / 581 * 100%);
+  block-size: calc(var(--h) / 823 * 100%);
+}
+
+.pocket .lcd::after {
+  background-size: calc(100% / 160) calc(100% / 144);
+  box-shadow:
+    inset calc(var(--u) * 2) calc(var(--u) * 2) calc(var(--u) * 6) var(--grid),
+    inset calc(var(--u) * -2) calc(var(--u) * -2) calc(var(--u) * 6) var(--grid);
+}
+
+/* Controls */
+.round,
+.pill,
+.dpad {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+
+/* Extends the touch target beyond the drawn button. */
+.round::before,
+.pill::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--u) * -9);
+  border-radius: 50%;
+}
+
+.pill::before {
+  inset: calc(var(--u) * -16) calc(var(--u) * -10);
+  border-radius: calc(var(--u) * 12);
+}
+
+.round,
+.pill {
+  transition:
+    transform 40ms,
+    filter 40ms;
+}
+
+.round {
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #4d4d4d 0 58%, #434343 100%);
+  box-shadow:
+    inset 0 0 0 calc(var(--u) * 2.4) #1b1b1b,
+    inset 0 calc(var(--u) * 3.6) 0 calc(var(--u) * 0.6) #ffffff12;
+}
+
+.pill {
+  border-radius: calc(var(--u) * 9);
+  background: linear-gradient(#6a6a6a, #555 55%, #4d4d4d);
+  box-shadow: inset 0 0 0 calc(var(--u) * 1.8) #3b3b3b;
+}
+
+.round.is-lit,
+.pill.is-lit {
+  transform: scale(0.93);
+  filter: brightness(0.78);
+}
+
+.dpad svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.dpad .cross {
+  fill: #474747;
+  stroke: #151515;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.dpad .hub {
+  fill: #3c3c3c;
+}
+
+.dpad .arrow {
+  fill: #353535;
+}
+
+.dpad .arrow.is-lit {
+  fill: #727272;
+}
+
+/* Key legend, only useful with a physical keyboard. */
+.keys {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stage {
+    --legend: 2.25rem;
+  }
+
+  .keys {
+    display: flex;
+    min-block-size: 1.75rem;
+    align-items: center;
+  }
+}

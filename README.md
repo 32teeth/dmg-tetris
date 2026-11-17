@@ -1,6 +1,6 @@
 # Tetris — Game Boy
 
-A faithful browser recreation of the original 1989 Game Boy _Tetris_ (A-type), drawn on a 160×144 canvas with the DMG's four-shade palette and a simulated LCD pixel grid. No dependencies, no build step.
+A faithful browser recreation of the original 1989 Game Boy _Tetris_ (A-type), drawn on a 160×144 canvas with the DMG's four-shade palette and a simulated LCD pixel grid, played on a Game Boy Pocket you can drive with a keyboard, mouse or touch screen. No build step.
 
 The game lives in [`rom/`](./rom).
 
@@ -10,7 +10,9 @@ The game lives in [`rom/`](./rom).
 
 GitHub Pages serves the repository root from the `main` branch (Settings → Pages → Source: _Deploy from a branch_, `main` / `/ (root)`). The root [`index.html`](./index.html) loads the game from `rom/` via `<base href="rom/">`, so the site opens straight into the game; keep it in sync with [`rom/index.html`](./rom/index.html).
 
-To run it locally, open [`rom/index.html`](./rom/index.html) in a modern browser, or serve the folder:
+The on-screen D-pad and buttons turn presses into real keyboard events, and [`multi-key-handler`](https://www.npmjs.com/package/multi-key-handler) (loaded from jsDelivr, pinned in the import map in `index.html`) lights up the matching button for both on-screen and physical key presses. If the package can't be loaded the game still plays; the buttons just don't light up.
+
+The page uses an ES module, so serve it over HTTP to run it locally (opening the file directly won't load the on-screen controls):
 
 ```sh
 npx serve rom
@@ -20,13 +22,15 @@ python3 -m http.server --directory rom 8000
 
 ## Controls
 
-| Button                   | Key                   |
-| ------------------------ | --------------------- |
-| D-Pad                    | Arrow keys            |
-| A (rotate ↻)             | `X` / `Space`         |
-| B (rotate ↺)             | `Z`                   |
-| Start                    | `Enter`               |
-| Select (hide NEXT piece) | `Shift` / `Backspace` |
+| Button                   | Key                         |
+| ------------------------ | --------------------------- |
+| D-Pad                    | Arrow keys                  |
+| A (rotate ↻)             | `X`                         |
+| B (rotate ↺)             | `Z`                         |
+| Start                    | `Enter`                     |
+| Select (hide NEXT piece) | `Space` / `Shift` / `Backspace` |
+
+On a touch screen, use the on-screen buttons; the D-pad can be slid across for diagonals, and several buttons can be held at once.
 
 - **Title:** `Enter` to continue.
 - **Level select:** arrows pick a level (0–9). `Enter` or `X` starts; hold `X` while pressing `Enter` to start at level +10. `Z` goes back.
@@ -46,7 +50,10 @@ There is no music, and no B-type or 2-player mode.
 
 | File                                 | Purpose                                         |
 | ------------------------------------ | ----------------------------------------------- |
-| [`rom/index.html`](./rom/index.html) | Page shell and key legend                       |
+| [`rom/index.html`](./rom/index.html) | Page shell, on-screen controls and key legend   |
+| [`rom/pocket.svg`](./rom/pocket.svg) | Game Boy Pocket body artwork                    |
+| [`rom/handheld.css`](./rom/handheld.css) | Pocket layout, buttons and touch styling    |
+| [`rom/handheld.js`](./rom/handheld.js) | Touch/mouse input and button lighting         |
 | [`rom/tetris.css`](./rom/tetris.css) | Palette, scaling and the LCD pixel-grid overlay |
 | [`rom/tetris.js`](./rom/tetris.js)   | Game logic, input, sound effects and rendering  |
 | [`rom/art.js`](./rom/art.js)         | 8×8 tile art (blocks, digits, panel frame)      |
@@ -56,14 +63,13 @@ Pixel art is written as rows of shade digits (`0` lightest … `3` darkest) and 
 
 ### Tweaking the LCD look
 
-In `rom/tetris.css`:
+The palette lives in `rom/tetris.css`; the pocket's screen size follows the page size, and its grid is set in `.pocket .lcd` in `rom/handheld.css`:
 
-| Variable            | Effect                                                                 |
-| ------------------- | ---------------------------------------------------------------------- |
-| `--scale`           | Screen pixels per game pixel (3 or more keeps the grid lines readable) |
-| `--grid`            | Color and opacity of the pixel-grid lines and inner shadow             |
-| `--gap`             | Thickness of the grid lines                                            |
-| `--gb-0` … `--gb-3` | The four LCD shades, lightest to darkest                               |
+| Variable            | Effect                                                                           |
+| ------------------- | -------------------------------------------------------------------------------- |
+| `--grid`            | Color and opacity of the pixel-grid lines and inner shadow                       |
+| `--gap`             | Thickness of the grid lines, as a share of one game pixel (`handheld.css`)       |
+| `--gb-0` … `--gb-3` | The four LCD shades, lightest to darkest (`tetris.css`)                          |
 
 ## Contributing
 
