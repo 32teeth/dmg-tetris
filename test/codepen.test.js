@@ -1,0 +1,22 @@
+import { describe, expect, it } from "vitest";
+import { toScript } from "../scripts/codepen.js";
+
+describe("toScript", () => {
+  it("drops import lines", () => {
+    expect(toScript('import { A } from "./a.js";\nconst b = 1;\n')).toBe("const b = 1;\n");
+  });
+
+  it("drops the export keyword from declarations", () => {
+    const source = "export const A = 1;\nexport function f() {}\nexport async function g() {}\nexport class C {}\n";
+    expect(toScript(source)).toBe("const A = 1;\nfunction f() {}\nasync function g() {}\nclass C {}\n");
+  });
+
+  it("drops a trailing export list, including multi-line ones", () => {
+    expect(toScript("class A {}\n\nexport {\n  A,\n  B,\n};\n")).toBe("class A {}\n");
+  });
+
+  it("leaves other lines alone, including words that merely contain export", () => {
+    const source = "// exports are removed\nconst exported = 1;\n";
+    expect(toScript(source)).toBe(source);
+  });
+});

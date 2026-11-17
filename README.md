@@ -68,6 +68,7 @@ There is no music, and no B-type or 2-player mode.
 | [`rom/tetris.css`](./rom/tetris.css) | Palette, scaling and the LCD pixel-grid overlay |
 | [`rom/tetris.js`](./rom/tetris.js)   | Game logic, input, sound effects and rendering  |
 | [`test/`](./test)                    | Unit tests (Vitest)                             |
+| [`scripts/codepen.js`](./scripts/codepen.js) | `npm run codepen` bundles the game into `codepen/` as the HTML, CSS and JS panes for CodePen |
 | [`rom/art.js`](./rom/art.js)         | 8×8 tile art (blocks, digits, panel frame)      |
 | [`rom/screens.js`](./rom/screens.js) | Full-screen pixel art (title, level select)     |
 
