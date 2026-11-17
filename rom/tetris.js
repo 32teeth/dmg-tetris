@@ -1,4 +1,5 @@
-"use strict";
+import { BLOCK_ART, DIGIT_ART, FRAME_ART, FRAME_MAP } from "./art.js";
+import { DIGIT_PLAIN, DIGIT_SELECTED, LEVEL_ROWS, TITLE_ROWS } from "./screens.js";
 
 // ---------------------------------------------------------------- constants
 
@@ -418,6 +419,31 @@ class PlayScene {
     this.#advance();
   }
 
+  get state() {
+    return this.#state;
+  }
+
+  get score() {
+    return this.#score;
+  }
+
+  get lines() {
+    return this.#lines;
+  }
+
+  get level() {
+    return this.#level;
+  }
+
+  get paused() {
+    return this.#paused;
+  }
+
+  // The falling piece (id, rotation, board position), or null between pieces.
+  get current() {
+    return this.#cur && { id: this.#cur.piece.id, rot: this.#cur.rot, x: this.#cur.x, y: this.#cur.y };
+  }
+
   // Mirrors the ROM: reroll up to twice when the hidden and new pieces are bit-subsets of the active one.
   #advance() {
     const current = this.#next;
@@ -691,11 +717,15 @@ class PlayScene {
 // ---------------------------------------------------------------- app
 
 class App {
-  screen = new Screen(document.querySelector("#screen"));
+  screen;
   sound = new Sound();
   input = new Input(() => this.sound.unlock());
   options = { level: 0 };
   scene = new TitleScene();
+
+  constructor(canvas) {
+    this.screen = new Screen(canvas);
+  }
 
   go(scene) {
     this.scene = scene;
@@ -731,4 +761,23 @@ class App {
   }
 }
 
-new App().run();
+export {
+  App,
+  BLOCKS,
+  FRAME_MS,
+  H,
+  Input,
+  KEYMAP,
+  LevelScene,
+  NEXT_PREVIEW,
+  PALETTE,
+  PIECES,
+  PlayScene,
+  SFX,
+  Screen,
+  Sound,
+  T,
+  TitleScene,
+  W,
+  cellTile,
+};

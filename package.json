@@ -1,0 +1,17 @@
+{
+  "name": "dmg-tetris",
+  "private": true,
+  "type": "module",
+  "description": "Game Boy Tetris in the browser, played on a Game Boy Pocket.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.12",
+    "jsdom": "^29.1.1",
+    "multi-key-handler": "^0.0.5",
+    "vitest": "^4.1.12"
+  }
+}

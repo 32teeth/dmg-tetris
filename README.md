@@ -53,14 +53,16 @@ There is no music, and no B-type or 2-player mode.
 | [`rom/index.html`](./rom/index.html) | Page shell, on-screen controls and key legend   |
 | [`rom/pocket.svg`](./rom/pocket.svg) | Game Boy Pocket body artwork                    |
 | [`rom/handheld.css`](./rom/handheld.css) | Pocket layout, buttons and touch styling    |
+| [`rom/main.js`](./rom/main.js) | Entry point: starts the game and the on-screen controls |
 | [`rom/handheld.js`](./rom/handheld.js) | Touch/mouse input and button lighting         |
 | [`rom/manifest.webmanifest`](./rom/manifest.webmanifest) | Home-screen app metadata (portrait) |
 | [`rom/tetris.css`](./rom/tetris.css) | Palette, scaling and the LCD pixel-grid overlay |
 | [`rom/tetris.js`](./rom/tetris.js)   | Game logic, input, sound effects and rendering  |
+| [`test/`](./test)                    | Unit tests (Vitest)                             |
 | [`rom/art.js`](./rom/art.js)         | 8×8 tile art (blocks, digits, panel frame)      |
 | [`rom/screens.js`](./rom/screens.js) | Full-screen pixel art (title, level select)     |
 
-Pixel art is written as rows of shade digits (`0` lightest … `3` darkest) and baked into offscreen canvases at startup.
+Pixel art is written as rows of shade digits (`0` lightest … `3` darkest) and baked into offscreen canvases at startup. All scripts are native ES modules.
 
 ### Tweaking the LCD look
 
@@ -71,6 +73,19 @@ The palette lives in `rom/tetris.css`; the pocket's screen size follows the page
 | `--grid`            | Color and opacity of the pixel-grid lines and inner shadow                       |
 | `--gap`             | Thickness of the grid lines, as a share of one game pixel (`handheld.css`)       |
 | `--gb-0` … `--gb-3` | The four LCD shades, lightest to darkest (`tetris.css`)                          |
+
+## Testing
+
+The game itself has no build step; Node is only needed for the tests ([Vitest](https://vitest.dev) with jsdom).
+
+```sh
+npm install
+npm test            # run once
+npm run test:watch  # re-run on change
+npm run coverage    # fails below 80% lines, statements, functions or branches
+```
+
+Canvas and audio are replaced by small fakes in [`test/setup.js`](./test/setup.js), so tests can check exactly what is drawn and played. `multi-key-handler` is a dev dependency for the tests; the browser loads the same version from the import map in `index.html`, so keep the two in step when upgrading. CI runs the coverage check on every push.
 
 ## Contributing
 
