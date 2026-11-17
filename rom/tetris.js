@@ -204,8 +204,8 @@ class Screen {
 
 const KEYMAP = {
   ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down",
-  KeyX: "a", Space: "a", KeyZ: "b",
-  Enter: "start", ShiftLeft: "select", ShiftRight: "select", Backspace: "select",
+  KeyX: "a", KeyZ: "b",
+  Space: "select", Enter: "start", ShiftLeft: "select", ShiftRight: "select", Backspace: "select",
 };
 
 class Input {
@@ -228,6 +228,7 @@ class Input {
       const button = KEYMAP[e.code];
       if (!button) return;
       e.preventDefault();
+      onGesture();
       this.#held.delete(button);
     });
     addEventListener("blur", () => this.#held.clear());

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 581 823" width="581" height="823">
+  <!-- Game Boy Pocket body artwork; the screen, D-pad and buttons are live HTML layered on top. -->
+  <path fill="#20232a" d="M84 63H524A12 12 0 0 1 536 75V735A78 78 0 0 1 458 813H84A12 12 0 0 1 72 801V75A12 12 0 0 1 84 63Z" />
+  <circle cx="141" cy="28" r="5.5" fill="#bfbfbf" />
+  <path fill="#bfbfbf" stroke="#b4b4b4" stroke-width="1.5" d="M49 28H489A12 12 0 0 1 501 40V700A78 78 0 0 1 423 778H49A12 12 0 0 1 37 766V40A12 12 0 0 1 49 28Z" />
+  <path fill="#d9d9d9" stroke="#cdcdcd" d="M76 74H463A8 8 0 0 1 471 82V366A50 50 0 0 1 421 416H76A8 8 0 0 1 68 408V82A8 8 0 0 1 76 74Z" />
+  <rect x="124" y="108" width="291" height="264" rx="3" fill="#8f948d" stroke="#797d77" stroke-width="2" />
+
+  <g fill="#d3d3d3" font-family="Helvetica, Arial, sans-serif" font-size="16">
+    <text x="70" y="61" textLength="34" lengthAdjust="spacingAndGlyphs">OFF</text>
+    <text x="151" y="61" textLength="28" lengthAdjust="spacingAndGlyphs">ON</text>
+    <circle cx="113" cy="55.5" r="2.6" />
+    <circle cx="137" cy="55.5" r="2.6" />
+    <path stroke="#d3d3d3" stroke-width="1.6" d="M113 27V38M137 27V38" />
+  </g>
+
+  <g fill="#e2e2e2">
+    <circle cx="132" cy="460" r="2" />
+    <circle cx="58" cy="534" r="2" />
+    <circle cx="206" cy="534" r="2" />
+    <circle cx="132" cy="609" r="2" />
+  </g>
+
+  <g fill="#1f1f1f" font-family="Helvetica, Arial, sans-serif" font-weight="700">
+    <text x="348" y="608" font-size="19" text-anchor="middle">B</text>
+    <text x="434" y="580" font-size="19" text-anchor="middle">A</text>
+    <text x="202" y="698" font-size="15" textLength="65" lengthAdjust="spacingAndGlyphs">SELECT</text>
+    <text x="278" y="698" font-size="15" textLength="52" lengthAdjust="spacingAndGlyphs">START</text>
+  </g>
+
+  <g stroke-linecap="round">
+    <path stroke="#b3b3b3" stroke-width="7" d="M415.0 664.0h0M441.6 664.0h0M468.3 664.0h0M401.6 677.3h0M428.3 677.3h0M455.0 677.3h0M388.3 690.7h0M415.0 690.7h0M441.6 690.7h0M468.3 690.7h0M401.6 704.0h0M428.3 704.0h0M455.0 704.0h0M388.3 717.3h0M415.0 717.3h0M441.6 717.3h0M468.3 717.3h0M401.6 730.6h0M428.3 730.6h0M455.0 730.6h0M388.3 744.0h0M415.0 744.0h0M441.6 744.0h0" />
+    <path stroke="#111" stroke-width="8" d="M428.3 664.0h0M455.0 664.0h0M415.0 677.3h0M441.6 677.3h0M468.3 677.3h0M401.6 690.7h0M428.3 690.7h0M455.0 690.7h0M388.3 704.0h0M415.0 704.0h0M441.6 704.0h0M468.3 704.0h0M401.6 717.3h0M428.3 717.3h0M455.0 717.3h0M388.3 730.6h0M415.0 730.6h0M441.6 730.6h0M401.6 744.0h0M428.3 744.0h0" />
+  </g>
+</svg>

@@ -2,22 +2,92 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#282c35" />
     <title>Tetris — Game Boy</title>
     <link rel="stylesheet" href="tetris.css" />
+    <link rel="stylesheet" href="handheld.css" />
+    <script type="importmap">
+      { "imports": { "multi-key-handler": "https://cdn.jsdelivr.net/npm/multi-key-handler@0.0.5/index.js" } }
+    </script>
     <script src="art.js" defer></script>
     <script src="screens.js" defer></script>
     <script src="tetris.js" defer></script>
+    <script src="handheld.js" type="module"></script>
   </head>
   <body>
-    <main class="handheld">
-      <div class="lcd">
-        <canvas
-          id="screen"
-          width="160"
-          height="144"
-          aria-label="Game Boy Tetris screen"
-        ></canvas>
+    <main class="stage">
+      <div class="pocket">
+        <img class="art" src="pocket.svg" alt="" draggable="false" />
+
+        <div class="lcd ctl" style="--x: 124; --y: 109; --w: 291; --h: 262">
+          <canvas
+            id="screen"
+            width="160"
+            height="144"
+            aria-label="Game Boy Tetris screen"
+          ></canvas>
+        </div>
+
+        <div
+          class="dpad ctl"
+          role="group"
+          aria-label="D-pad"
+          data-dpad
+          style="--x: 56.7; --y: 459.3; --w: 150; --h: 150"
+        >
+          <svg viewBox="-75 -75 150 150" aria-hidden="true">
+            <polygon
+              class="cross"
+              points="-21.25,-56.8 21.25,-56.8 21.25,-21.25 56.8,-21.25 56.8,21.25 21.25,21.25 21.25,56.8 -21.25,56.8 -21.25,21.25 -56.8,21.25 -56.8,-21.25 -21.25,-21.25"
+            />
+            <circle class="hub" r="12.7" />
+            <polygon class="arrow" data-lit="up" points="0,-48.3 12.5,-26.6 -12.5,-26.6" />
+            <polygon class="arrow" data-lit="down" points="0,48.3 12.5,26.6 -12.5,26.6" />
+            <polygon class="arrow" data-lit="left" points="-48.4,0 -26.7,-12.5 -26.7,12.5" />
+            <polygon class="arrow" data-lit="right" points="48.4,0 26.7,-12.5 26.7,12.5" />
+          </svg>
+        </div>
+
+        <button
+          class="round ctl"
+          type="button"
+          tabindex="-1"
+          aria-label="B"
+          data-button="b"
+          data-lit="b"
+          style="--x: 320; --y: 520.4; --w: 56.6; --h: 56.6"
+        ></button>
+        <button
+          class="round ctl"
+          type="button"
+          tabindex="-1"
+          aria-label="A"
+          data-button="a"
+          data-lit="a"
+          style="--x: 405.7; --y: 491.7; --w: 56.6; --h: 56.6"
+        ></button>
+        <button
+          class="pill ctl"
+          type="button"
+          tabindex="-1"
+          aria-label="Select"
+          data-button="select"
+          data-lit="select"
+          style="--x: 210; --y: 650.5; --w: 50; --h: 17"
+        ></button>
+        <button
+          class="pill ctl"
+          type="button"
+          tabindex="-1"
+          aria-label="Start"
+          data-button="start"
+          data-lit="start"
+          style="--x: 280; --y: 650.5; --w: 50; --h: 17"
+        ></button>
       </div>
 
       <dl class="keys">
@@ -26,16 +96,20 @@
           <dd>Arrow keys</dd>
         </div>
         <div>
-          <dt>A (rotate ↻)</dt>
-          <dd>X / Space</dd>
+          <dt>A</dt>
+          <dd>X</dd>
         </div>
         <div>
-          <dt>B (rotate ↺)</dt>
+          <dt>B</dt>
           <dd>Z</dd>
         </div>
         <div>
           <dt>Start</dt>
           <dd>Enter</dd>
+        </div>
+        <div>
+          <dt>Select</dt>
+          <dd>Space</dd>
         </div>
       </dl>
     </main>
