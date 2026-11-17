@@ -3,7 +3,10 @@
 //   npm run codepen   ->  codepen/index.html, codepen/style.css, codepen/script.js
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { pathToFileURL } from "node:url";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // Turns an ES module into plain script text so several can be concatenated into one file.
 export function toScript(source) {
@@ -13,7 +16,7 @@ export function toScript(source) {
     .replace(/^export (?=(?:async )?(?:const|let|function|class) )/gm, "");
 }
 
-const read = path => readFileSync(new URL(`../rom/${path}`, import.meta.url), "utf8");
+const read = path => readFileSync(join(root, "rom", path), "utf8");
 
 export function build() {
   const page = read("index.html");
@@ -35,15 +38,16 @@ export function build() {
   return {
     "index.html": `${body}\n`,
     "style.css": `${read("tetris.css")}\n${read("handheld.css")}`,
-    "script.js": `${script}\nnew App(document.querySelector("#screen")).run();\ninitHandheld();\n`,
+    // CodePen's loop protection rewrites loops and can break a game loop, so opt out of it.
+    "script.js": `// noprotect\n${script}\nnew App(document.querySelector("#screen")).run();\ninitHandheld();\n`,
   };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const out = new URL("../codepen/", import.meta.url);
+  const out = join(root, "codepen");
   mkdirSync(out, { recursive: true });
   for (const [name, text] of Object.entries(build())) {
-    writeFileSync(new URL(name, out), text);
+    writeFileSync(join(out, name), text);
     console.log(`codepen/${name}  ${(text.length / 1024).toFixed(1)} KB`);
   }
 }

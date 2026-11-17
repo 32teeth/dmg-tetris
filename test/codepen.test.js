@@ -1,5 +1,33 @@
 import { describe, expect, it } from "vitest";
-import { toScript } from "../scripts/codepen.js";
+import { build, toScript } from "../scripts/codepen.js";
+
+describe("build", () => {
+  const files = build();
+
+  it("makes the three CodePen panes", () => {
+    expect(Object.keys(files).sort()).toEqual(["index.html", "script.js", "style.css"]);
+  });
+
+  it("opts out of CodePen's loop protection", () => {
+    expect(files["script.js"].startsWith("// noprotect\n")).toBe(true);
+  });
+
+  it("is a classic script: no static imports or exports, and the CDN replaces the package name", () => {
+    expect(files["script.js"]).not.toMatch(/^(import|export)\b/m);
+    expect(files["script.js"]).toContain('import("https://cdn.jsdelivr.net/npm/multi-key-handler@');
+  });
+
+  it("inlines the console artwork into the HTML", () => {
+    expect(files["index.html"]).toContain('<svg class="art"');
+    expect(files["index.html"]).not.toContain("pocket.svg");
+    expect(files["index.html"]).not.toMatch(/<(script|link|html|body)\b/);
+  });
+
+  it("combines both stylesheets", () => {
+    expect(files["style.css"]).toContain("--gb-0");
+    expect(files["style.css"]).toContain(".pocket");
+  });
+});
 
 describe("toScript", () => {
   it("drops import lines", () => {
