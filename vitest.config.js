@@ -10,8 +10,10 @@ export default defineConfig({
       include: ["rom/**/*.js"],
       // Boot file only: wires the game to the page, no logic of its own.
       exclude: ["rom/main.js"],
-      reporter: ["text", "html"],
+      reporter: ["text", "html", "json-summary"],
       thresholds: { lines: 80, statements: 80, functions: 80, branches: 80 },
     },
+    reporters: ["default", "json"],
+    outputFile: { json: "coverage/test-results.json" },
   },
 });

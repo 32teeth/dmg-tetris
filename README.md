@@ -85,7 +85,7 @@ npm run test:watch  # re-run on change
 npm run coverage    # fails below 80% lines, statements, functions or branches
 ```
 
-Canvas and audio are replaced by small fakes in [`test/setup.js`](./test/setup.js), so tests can check exactly what is drawn and played. `multi-key-handler` is a dev dependency for the tests; the browser loads the same version from the import map in `index.html`, so keep the two in step when upgrading. CI runs the coverage check on every push.
+Canvas and audio are replaced by small fakes in [`test/setup.js`](./test/setup.js), so tests can check exactly what is drawn and played. `multi-key-handler` is a dev dependency for the tests; the browser loads the same version from the import map in `index.html`, so keep the two in step when upgrading. CI runs the coverage check on every push and prints the report in the job summary. On `main` it also writes the results to [`COVERAGE.md`](./COVERAGE.md) (`npm run report` does the same locally after `npm run coverage`), overwriting the previous report and committing it only when the numbers changed. If `main` is protected, allow the Actions bot to push.
 
 ## Contributing
 

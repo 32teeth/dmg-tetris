@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,4 +17,21 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run coverage
+
+      - name: Run tests with coverage
+        run: npm run coverage
+
+      - name: Write COVERAGE.md
+        if: always() && hashFiles('coverage/test-results.json') != ''
+        run: |
+          npm run report
+          cat COVERAGE.md >> "$GITHUB_STEP_SUMMARY"
+
+      # Only main publishes the file, so feature branches never conflict over it.
+      - name: Commit COVERAGE.md
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main' && hashFiles('COVERAGE.md') != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add COVERAGE.md
+          git diff --staged --quiet || { git commit -m "docs: update coverage report [skip ci]" && git push; }
