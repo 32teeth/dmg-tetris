@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildReport } from "../scripts/coverage-report.js";
+import { buildBadge, buildReport } from "../scripts/coverage-report.js";
 
 const metric = pct => ({ total: 10, covered: Math.round(pct / 10), skipped: 0, pct });
 const entry = (s, b, f, l) => ({ statements: metric(s), branches: metric(b), functions: metric(f), lines: metric(l) });
@@ -58,5 +58,31 @@ describe("buildReport", () => {
     expect(text.endsWith("\n")).toBe(true);
     expect(text.endsWith("\n\n")).toBe(false);
     expect(report()).toBe(text);
+  });
+});
+
+describe("buildBadge", () => {
+  const badge = lines => buildBadge({ total: entry(50, 50, 50, lines) });
+
+  it("describes a shields.io endpoint badge for the total line coverage", () => {
+    expect(badge(97)).toEqual({ schemaVersion: 1, label: "coverage", message: "97%", color: "brightgreen" });
+  });
+
+  it("rounds to one decimal place", () => {
+    expect(badge(98.7812).message).toBe("98.8%");
+    expect(badge(100).message).toBe("100%");
+  });
+
+  it.each([
+    [100, "brightgreen"],
+    [90, "brightgreen"],
+    [89.9, "green"],
+    [80, "green"],
+    [79.9, "yellow"],
+    [70, "yellow"],
+    [69.9, "red"],
+    [0, "red"],
+  ])("colours %s%% %s", (lines, color) => {
+    expect(badge(lines).color).toBe(color);
   });
 });

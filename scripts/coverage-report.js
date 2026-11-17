@@ -2,7 +2,7 @@
 //
 //   npm run coverage && npm run report
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -41,19 +41,29 @@ export function buildReport({ summary, results, threshold, root }) {
   ].join("\n")}\n`;
 }
 
+// Data for a shields.io "endpoint" badge showing total line coverage.
+export function buildBadge({ total }) {
+  const { pct } = total.lines;
+  const color = pct >= 90 ? "brightgreen" : pct >= 80 ? "green" : pct >= 70 ? "yellow" : "red";
+  return { schemaVersion: 1, label: "coverage", message: `${Math.round(pct * 10) / 10}%`, color };
+}
+
 async function main() {
   const { default: config } = await import("../vitest.config.js");
   const { thresholds } = config.test.coverage;
   const read = path => JSON.parse(readFileSync(path, "utf8"));
+  const summary = read("coverage/coverage-summary.json");
 
   const report = buildReport({
-    summary: read("coverage/coverage-summary.json"),
+    summary,
     results: read("coverage/test-results.json"),
     threshold: Math.min(...Object.values(thresholds)),
     root: process.cwd(),
   });
   writeFileSync("COVERAGE.md", report);
-  console.log("Wrote COVERAGE.md");
+  mkdirSync("badges", { recursive: true });
+  writeFileSync("badges/coverage.json", `${JSON.stringify(buildBadge(summary))}\n`);
+  console.log("Wrote COVERAGE.md and badges/coverage.json");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

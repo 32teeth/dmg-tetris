@@ -1,5 +1,14 @@
 # Tetris — Game Boy
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/32teeth/dmg-tetris/test.yml?branch=main&label=tests&style=flat-square)](https://github.com/32teeth/dmg-tetris/actions/workflows/test.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2F32teeth%2Fdmg-tetris%2Fmain%2Fbadges%2Fcoverage.json&style=flat-square)](./COVERAGE.md)
+[![Pages](https://img.shields.io/github/deployments/32teeth/dmg-tetris/github-pages?label=pages&style=flat-square)](https://32teeth.github.io/dmg-tetris)
+[![Play](https://img.shields.io/badge/play-in%20your%20browser-9bbc0f?style=flat-square)](https://32teeth.github.io/dmg-tetris)
+[![Tested with Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES%20modules-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](./rom)
+[![No build step](https://img.shields.io/badge/build%20step-none-brightgreen?style=flat-square)](#play)
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/license-CC%20BY--SA%204.0-lightgrey?style=flat-square)](./LICENSE.md)
+
 A faithful browser recreation of the original 1989 Game Boy _Tetris_ (A-type), drawn on a 160×144 canvas with the DMG's four-shade palette and a simulated LCD pixel grid, played on a Game Boy Pocket you can drive with a keyboard, mouse or touch screen. No build step.
 
 The game lives in [`rom/`](./rom).
@@ -85,7 +94,7 @@ npm run test:watch  # re-run on change
 npm run coverage    # fails below 80% lines, statements, functions or branches
 ```
 
-Canvas and audio are replaced by small fakes in [`test/setup.js`](./test/setup.js), so tests can check exactly what is drawn and played. `multi-key-handler` is a dev dependency for the tests; the browser loads the same version from the import map in `index.html`, so keep the two in step when upgrading. CI runs the coverage check on every push and prints the report in the job summary. On `main` it also writes the results to [`COVERAGE.md`](./COVERAGE.md) (`npm run report` does the same locally after `npm run coverage`), overwriting the previous report and committing it only when the numbers changed. If `main` is protected, allow the Actions bot to push.
+Canvas and audio are replaced by small fakes in [`test/setup.js`](./test/setup.js), so tests can check exactly what is drawn and played. `multi-key-handler` is a dev dependency for the tests; the browser loads the same version from the import map in `index.html`, so keep the two in step when upgrading. CI runs the coverage check on every push and prints the report in the job summary. On `main` it also writes the results to [`COVERAGE.md`](./COVERAGE.md) (`npm run report` does the same locally after `npm run coverage`), overwriting the previous report and the coverage badge data in [`badges/coverage.json`](./badges/coverage.json) (read by the README's Coverage badge), and committing only when the numbers changed. If `main` is protected, allow the Actions bot to push.
 
 ## Contributing
 
