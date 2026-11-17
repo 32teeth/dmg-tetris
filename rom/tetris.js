@@ -1,4 +1,5 @@
-"use strict";
+import { BLOCK_ART, DIGIT_ART, FRAME_ART, FRAME_MAP } from "./art.js";
+import { DIGIT_PLAIN, DIGIT_SELECTED, LEVEL_ROWS, TITLE_ROWS } from "./screens.js";
 
 // ---------------------------------------------------------------- constants
 
@@ -98,6 +99,7 @@ const LEVEL_SCREEN = bake(LEVEL_ROWS);
 const LEVEL_DIGITS_PLAIN = DIGIT_PLAIN.map(rows => bake(rows));
 const LEVEL_DIGITS_SELECTED = DIGIT_SELECTED.map(rows => bake(rows));
 
+const HEART = bake(["0330330", "3113113", "3111113", "0311130", "0031300", "0003000"]);
 const FLASH = bake(Array(8).fill("22222222"));
 const CURTAIN = bake(["32323232", "23232323", "32323232", "23232323", "32323232", "23232323", "32323232", "23232323"]);
 
@@ -184,6 +186,18 @@ class Screen {
     for (const ch of str) {
       this.glyph(ch, x, y, ink, scale);
       x += T * scale;
+    }
+  }
+
+  // Heavier lettering for the game-over screen: each glyph is drawn twice, one pixel apart.
+  boldText(str, x, y, ink = 3) {
+    for (const ch of str) {
+      if (ch === "♥") this.tilePx(HEART, x, y);
+      else {
+        this.glyph(ch, x, y, ink, 1);
+        this.glyph(ch, x + 1, y, ink, 1);
+      }
+      x += T;
     }
   }
 
@@ -405,6 +419,31 @@ class PlayScene {
     this.#advance();
   }
 
+  get state() {
+    return this.#state;
+  }
+
+  get score() {
+    return this.#score;
+  }
+
+  get lines() {
+    return this.#lines;
+  }
+
+  get level() {
+    return this.#level;
+  }
+
+  get paused() {
+    return this.#paused;
+  }
+
+  // The falling piece (id, rotation, board position), or null between pieces.
+  get current() {
+    return this.#cur && { id: this.#cur.piece.id, rot: this.#cur.rot, x: this.#cur.x, y: this.#cur.y };
+  }
+
   // Mirrors the ROM: reroll up to twice when the hidden and new pieces are bit-subsets of the active one.
   #advance() {
     const current = this.#next;
@@ -603,15 +642,38 @@ class PlayScene {
       });
     }
 
-    if (this.#state === "over") {
-      s.rect(FIELD_X + 24, 24, 64, 48, 0);
-      s.box(FIELD_COL0 + 3, 3, 8, 6);
-      s.center("GAME", 38, 3, 1, FIELD_X, FIELD_COLS * T);
-      s.center("OVER", 50, 3, 1, FIELD_X, FIELD_COLS * T);
-      s.rect(FIELD_X + 24, 80, 64, 48, 0);
-      s.box(FIELD_COL0 + 3, 10, 8, 6);
-      ["PLEASE", "TRY", "AGAIN"].forEach((word, i) => s.center(word, 90 + i * 12, 3, 1, FIELD_X, FIELD_COLS * T));
+    if (this.#state === "over") this.#drawGameOver(s);
+  }
+
+  #drawGameOver(s) {
+    const centre = FIELD_X + (FIELD_COLS * T - 32) / 2;
+
+    // Chamfered double border: a 2px dark frame, then a 1px light gap and a 1px mid-tone line.
+    const [x, y, w, h] = [26, 18, 60, 52];
+    s.rect(x, y, w, h, 0);
+    s.rect(x + 2, y, w - 4, 2);
+    s.rect(x + 2, y + h - 2, w - 4, 2);
+    s.rect(x, y + 2, 2, h - 4);
+    s.rect(x + w - 2, y + 2, 2, h - 4);
+    for (const [cx, cy] of [[x + 1, y + 1], [x + w - 2, y + 1], [x + 1, y + h - 2], [x + w - 2, y + h - 2]]) {
+      s.rect(cx, cy, 1, 1);
     }
+    s.rect(x + 4, y + 3, w - 8, 1, 1);
+    s.rect(x + 4, y + h - 4, w - 8, 1, 1);
+    s.rect(x + 3, y + 4, 1, h - 8, 1);
+    s.rect(x + w - 4, y + 4, 1, h - 8, 1);
+
+    for (const [word, row] of [["GAME", 33], ["OVER", 49]]) {
+      s.boldText(word, centre, row);
+      s.rect(centre, row + 7, 32, 1, 1);
+    }
+
+    // Each line is dotted-underlined and steps 8px further right; the last ends in a heart.
+    [["PLEASE", 97], ["TRY", 113], ["AGAIN♥", 129]].forEach(([word, row], i) => {
+      const left = 24 + i * 8;
+      s.boldText(word, left, row);
+      for (let dx = 0; dx < word.length * T; dx += 2) s.rect(left + dx, row + 7, 1, 1);
+    });
   }
 
   #drawField(s) {
@@ -647,7 +709,7 @@ class PlayScene {
     value(this.#level, 17, 7);
     value(this.#lines, 17, 10);
 
-    if (this.#hideNext) return;
+    if (this.#hideNext || this.#state === "over") return;
     for (const { tile, x, y } of NEXT_PREVIEW[this.#next]) s.tilePx(tile, x, y);
   }
 }
@@ -655,11 +717,15 @@ class PlayScene {
 // ---------------------------------------------------------------- app
 
 class App {
-  screen = new Screen(document.querySelector("#screen"));
+  screen;
   sound = new Sound();
   input = new Input(() => this.sound.unlock());
   options = { level: 0 };
   scene = new TitleScene();
+
+  constructor(canvas) {
+    this.screen = new Screen(canvas);
+  }
 
   go(scene) {
     this.scene = scene;
@@ -670,6 +736,12 @@ class App {
     let acc = 0;
     let stale = true;
     const loop = now => {
+      // Hosts can freeze the game (e.g. while the device is in landscape) with data-suspended.
+      if (document.documentElement.hasAttribute("data-suspended")) {
+        last = now;
+        requestAnimationFrame(loop);
+        return;
+      }
       acc += Math.min(now - last, 250);
       last = now;
       while (acc >= FRAME_MS) {
@@ -689,4 +761,23 @@ class App {
   }
 }
 
-new App().run();
+export {
+  App,
+  BLOCKS,
+  FRAME_MS,
+  H,
+  Input,
+  KEYMAP,
+  LevelScene,
+  NEXT_PREVIEW,
+  PALETTE,
+  PIECES,
+  PlayScene,
+  SFX,
+  Screen,
+  Sound,
+  T,
+  TitleScene,
+  W,
+  cellTile,
+};

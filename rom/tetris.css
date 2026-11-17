@@ -2,10 +2,10 @@
 
 /* LCD shades, lightest to darkest */
 :root {
-  --gb-0: #fffb87;
-  --gb-1: #b1ae4e;
-  --gb-2: #84804e;
-  --gb-3: #4e4e4e;
+  --gb-0: #d7e894;
+  --gb-1: #aec440;
+  --gb-2: #527f39;
+  --gb-3: #204631;
 
   --scale: 4;
   --scale-px: calc(var(--scale) * 1px);

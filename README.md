@@ -1,5 +1,14 @@
 # Tetris — Game Boy
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/32teeth/dmg-tetris/test.yml?branch=main&label=tests&style=flat-square)](https://github.com/32teeth/dmg-tetris/actions/workflows/test.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2F32teeth%2Fdmg-tetris%2Fmain%2Fbadges%2Fcoverage.json&style=flat-square)](./COVERAGE.md)
+[![Pages](https://img.shields.io/github/deployments/32teeth/dmg-tetris/github-pages?label=pages&style=flat-square)](https://32teeth.github.io/dmg-tetris)
+[![Play](https://img.shields.io/badge/play-in%20your%20browser-9bbc0f?style=flat-square)](https://32teeth.github.io/dmg-tetris)
+[![Tested with Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES%20modules-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](./rom)
+[![No build step](https://img.shields.io/badge/build%20step-none-brightgreen?style=flat-square)](#play)
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/license-CC%20BY--SA%204.0-lightgrey?style=flat-square)](./LICENSE.md)
+
 A faithful browser recreation of the original 1989 Game Boy _Tetris_ (A-type), drawn on a 160×144 canvas with the DMG's four-shade palette and a simulated LCD pixel grid, played on a Game Boy Pocket you can drive with a keyboard, mouse or touch screen. No build step.
 
 The game lives in [`rom/`](./rom).
@@ -30,7 +39,7 @@ python3 -m http.server --directory rom 8000
 | Start                    | `Enter`                     |
 | Select (hide NEXT piece) | `Space` / `Shift` / `Backspace` |
 
-On a touch screen, use the on-screen buttons; the D-pad can be slid across for diagonals, and several buttons can be held at once.
+On a touch screen, use the on-screen buttons; the D-pad can be slid across for diagonals, and several buttons can be held at once. The console is sized to fit the screen, text selection and zoom gestures are disabled, and the game is portrait-only: in landscape on a phone it is frozen behind a "rotate your device" prompt. The key legend below the console only appears on desktop.
 
 - **Title:** `Enter` to continue.
 - **Level select:** arrows pick a level (0–9). `Enter` or `X` starts; hold `X` while pressing `Enter` to start at level +10. `Z` goes back.
@@ -53,13 +62,16 @@ There is no music, and no B-type or 2-player mode.
 | [`rom/index.html`](./rom/index.html) | Page shell, on-screen controls and key legend   |
 | [`rom/pocket.svg`](./rom/pocket.svg) | Game Boy Pocket body artwork                    |
 | [`rom/handheld.css`](./rom/handheld.css) | Pocket layout, buttons and touch styling    |
+| [`rom/main.js`](./rom/main.js) | Entry point: starts the game and the on-screen controls |
 | [`rom/handheld.js`](./rom/handheld.js) | Touch/mouse input and button lighting         |
+| [`rom/manifest.webmanifest`](./rom/manifest.webmanifest) | Home-screen app metadata (portrait) |
 | [`rom/tetris.css`](./rom/tetris.css) | Palette, scaling and the LCD pixel-grid overlay |
 | [`rom/tetris.js`](./rom/tetris.js)   | Game logic, input, sound effects and rendering  |
+| [`test/`](./test)                    | Unit tests (Vitest)                             |
 | [`rom/art.js`](./rom/art.js)         | 8×8 tile art (blocks, digits, panel frame)      |
 | [`rom/screens.js`](./rom/screens.js) | Full-screen pixel art (title, level select)     |
 
-Pixel art is written as rows of shade digits (`0` lightest … `3` darkest) and baked into offscreen canvases at startup.
+Pixel art is written as rows of shade digits (`0` lightest … `3` darkest) and baked into offscreen canvases at startup. All scripts are native ES modules.
 
 ### Tweaking the LCD look
 
@@ -70,6 +82,19 @@ The palette lives in `rom/tetris.css`; the pocket's screen size follows the page
 | `--grid`            | Color and opacity of the pixel-grid lines and inner shadow                       |
 | `--gap`             | Thickness of the grid lines, as a share of one game pixel (`handheld.css`)       |
 | `--gb-0` … `--gb-3` | The four LCD shades, lightest to darkest (`tetris.css`)                          |
+
+## Testing
+
+The game itself has no build step; Node is only needed for the tests ([Vitest](https://vitest.dev) with jsdom).
+
+```sh
+npm install
+npm test            # run once
+npm run test:watch  # re-run on change
+npm run coverage    # fails below 80% lines, statements, functions or branches
+```
+
+Canvas and audio are replaced by small fakes in [`test/setup.js`](./test/setup.js), so tests can check exactly what is drawn and played. `multi-key-handler` is a dev dependency for the tests; the browser loads the same version from the import map in `index.html`, so keep the two in step when upgrading. CI runs the coverage check on every push and prints the report in the job summary. On `main` it also writes the results to [`COVERAGE.md`](./COVERAGE.md) (`npm run report` does the same locally after `npm run coverage`), overwriting the previous report and the coverage badge data in [`badges/coverage.json`](./badges/coverage.json) (read by the README's Coverage badge), and committing only when the numbers changed. If `main` is protected, allow the Actions bot to push.
 
 ## Contributing
 
